@@ -9,7 +9,10 @@ using  namespace std;
 
 int main(){
 
-//criação do baralho com vetor bidimensional, armazena nome da carta em string e o respectivo valor em pontos.
+/*
+criação do baralho com vetor bidimensional, armazena nome da carta em string e o respectivo valor em pontos.
+Onde a primeira dimensão é o nome da carta em string, a segunda dimensão é o valor respectivo da carta.
+*/
 std::string baralho[53][2] = {
     {"Ás de copas","1"},
     {"Ás de espadas","1"},
@@ -70,14 +73,28 @@ std::string baralho[53][2] = {
 string jogadorHumano [53][2];
 //Baralho do jogador Maquina
 string jogadorMaquina [53][2];
+
+//Pontuação do jogador Humano
+int pontuacaoJogadorHumano = 0;
+//Pontuação do jogador Máquina
+int pontuacaoJogadorMaquina = 0;
+
 //Teste de cópia de uma carta do baralho pro baralho do jogador
+//Copiando o nome da carta do baralho pro jogador -> jogadorHumano[0][0] = Baralho[0][0]
 jogadorHumano[0][0] = baralho[0][0];
+
+//Copiando o valor da carta do baralho pro jogador -> jogadorHumano[0][1] = Baralho[0][1]
 jogadorHumano[0][1] = baralho[0][1];
+
+//Atribuindo o valor da carta do baralho do jogador, a sua variável pontos. O método atoi é pra converter a string em inteiro
+pontuacaoJogadorHumano += atoi(jogadorHumano[0][1].c_str());
+
 //prints
 cout << baralho[0][0] << endl;
 cout << baralho[1][0] << endl;
 cout << baralho[2][0] << endl;
 cout << baralho[3][0] << endl;
+cout << pontuacaoJogadorHumano << endl;
 
 
 }
