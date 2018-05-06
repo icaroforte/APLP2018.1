@@ -1,10 +1,14 @@
 # APLP2018.1
 Repositório da Disciplina APLP - 2018.1
 
-Grupo -    Yago da Costa Tavares
-	         Ícaro Forte Dantas Medeiros
-           Tulio Henrique Escarião da Nóbrega
- 	         Rafael de Paula Cadena
+Grupo -    
+Yago da Costa Tavares
+	   
+Ícaro Forte Dantas Medeiros
+           
+Tulio Henrique Escarião da Nóbrega
+ 	        
+Rafael de Paula Cadena
 
 Tema: Jogo - 21
 	

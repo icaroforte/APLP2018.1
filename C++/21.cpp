@@ -7,6 +7,8 @@
 
 using  namespace std;
 
+int somaPontuacao(string teste[][2]);
+
 int main(){
 
 /*
@@ -86,16 +88,32 @@ jogadorHumano[0][0] = baralho[0][0];
 //Copiando o valor da carta do baralho pro jogador -> jogadorHumano[0][1] = Baralho[0][1]
 jogadorHumano[0][1] = baralho[0][1];
 
+jogadorHumano[1][1] = baralho[35][1];
+jogadorHumano[2][1] = baralho[23][1];
+
 //Atribuindo o valor da carta do baralho do jogador, a sua variável pontos. O método atoi é pra converter a string em inteiro
-pontuacaoJogadorHumano += atoi(jogadorHumano[0][1].c_str());
+//pontuacaoJogadorHumano += atoi(jogadorHumano[0][1].c_str());
 
 //prints
-cout << baralho[0][0] << endl;
-cout << baralho[1][0] << endl;
-cout << baralho[2][0] << endl;
-cout << baralho[3][0] << endl;
-cout << pontuacaoJogadorHumano << endl;
+//cout << baralho[0][0] << endl;
+//cout << baralho[1][0] << endl;
+//cout << baralho[2][0] << endl;
+//cout << baralho[3][0] << endl;
+//cout << pontuacaoJogadorHumano << endl;
 
+pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
+
+cout << pontuacaoJogadorHumano << endl;
 
 }
 
+//Função que recebe um array bidimensional baralho e soma os valores das cartas no seu baralho
+int somaPontuacao(string teste[][2]){
+    int totalPontos = 0;
+
+    for(int i=0; i<=53; i++){
+        totalPontos += atoi(teste[i][1].c_str());
+    }
+
+    return totalPontos;
+}
