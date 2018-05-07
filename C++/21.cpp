@@ -170,7 +170,7 @@ void adicionaCartaJogador(string jogador[][2]){
 
 //    cout << nomeCarta[0][0] << " - " << valorCarta[0][1]  << endl;
 
-    for (int i=0; i<=53; i++){
+    for (int i=1; i<=53; i++){
         if(jogador[i][0] == "" & jogador[i][1] == ""){
             jogador[i][0] = nomeCarta[0][0];
             jogador[i][1] = valorCarta[0][1];
