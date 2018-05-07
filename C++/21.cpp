@@ -12,8 +12,9 @@ using  namespace std;
 /*
 Variáveis globais
 */
-int somaPontuacao(string teste[][2]);
+int somaPontuacao(string baralhoASomar[][2]);
 void adicionaCartaJogador();
+void exibeBaralho(string baralhoAExibir[][2]);
 /*
 criação do baralho com vetor bidimensional, armazena nome da carta em string e o respectivo valor em pontos.
 Onde a primeira dimensão é o nome da carta em string, a segunda dimensão é o valor respectivo da carta.
@@ -95,7 +96,8 @@ int main(){
 //jogadorHumano[1][0] = baralho[35][0];
 //jogadorHumano[1][1] = baralho[35][1];
 //jogadorHumano[2][0] = baralho[23][0];
-//jogadorHumano[2][1] = baralho[23][1];
+//jogadorHumano[5][0] = baralho[23][0];
+//jogadorHumano[5][1] = baralho[23][1];
 
 //Atribuindo o valor da carta do baralho do jogador, a sua variável pontos. O método atoi é pra converter a string em inteiro
 //pontuacaoJogadorHumano += atoi(jogadorHumano[0][1].c_str());
@@ -110,7 +112,9 @@ adicionaCartaJogador();
 //Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano
 pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
 
+exibeBaralho(jogadorHumano);
 cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
+
 
 //prints
 //cout << jogadorHumano[0][0] << endl;
@@ -121,16 +125,17 @@ cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << end
 }
 
 //Função que recebe um array bidimensional baralho e soma os valores das cartas no seu baralho
-int somaPontuacao(string teste[][2]){
+int somaPontuacao(string baralhoASomar[][2]){
     int totalPontos = 0;
 
     for(int i=0; i<=53; i++){
-        totalPontos += atoi(teste[i][1].c_str());
+        totalPontos += atoi(baralhoASomar[i][1].c_str());
     }
 
     return totalPontos;
 }
 
+//Função incompleta que adiciona carta ao baralho de um jogador
 void adicionaCartaJogador(){
 //Gerando um índice aleatório
     std::random_device rd;
@@ -153,6 +158,17 @@ void adicionaCartaJogador(){
             jogadorHumano[i][0] = nomeCarta[0][0];
             jogadorHumano[i][1] = valorCarta[0][1];
             break;
+        }
+    }
+
+}
+
+//Função que exibe as cartas e seus respectivos pontos de um baralho
+void exibeBaralho(string baralhoAExibir[][2]){
+
+    for(int i=0; i<=53; i++){
+        if(baralhoAExibir[i][0] != "" && baralhoAExibir[i][1] !=""){
+            cout << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
         }
     }
 
