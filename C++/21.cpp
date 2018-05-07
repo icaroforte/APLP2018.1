@@ -106,16 +106,15 @@ int main(){
 //cout << pontuacaoJogadorHumano << endl;
 
 //Adicionando 3 cartas ao jogador humano
+adicionaCartaJogador(jogadorHumano);
+adicionaCartaJogador(jogadorHumano);
+adicionaCartaJogador(jogadorHumano);
 
 //Adicionando 3 cartas ao jogador maquina
+adicionaCartaJogador(jogadorMaquina);
+adicionaCartaJogador(jogadorMaquina);
+adicionaCartaJogador(jogadorMaquina);
 
-//adicionaCartaJogador(jogadorHumano);
-adicionaCartaJogador(jogadorHumano);
-adicionaCartaJogador(jogadorHumano);
-adicionaCartaJogador(jogadorMaquina);
-adicionaCartaJogador(jogadorMaquina);
-//adicionaCartaJogador(jogadorMaquina);
-//adicionaCartaJogador(jogadorMaquina);
 
 
 //Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano
@@ -125,7 +124,7 @@ pontuacaoJogadorMaquina = somaPontuacao(jogadorMaquina);
 exibeBaralho(jogadorHumano);
 cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
 
-cout <<"---------------------------------" << endl;
+cout <<"---------------------------------------------------" << endl;
 
 exibeBaralho(jogadorMaquina);
 cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
@@ -161,19 +160,16 @@ void adicionaCartaJogador(string jogador[][2]){
 //exibe o inteiro aleatório gerado
 //cout << "Inteiro aleatório gerado: " << random_integer << endl;
 
-    string nomeCarta[53][2];
-    string valorCarta[53][2];
+    string nomeCarta;
+    string valorCarta;
 
-    nomeCarta[0][0] = baralho[random_integer][0];
-    valorCarta[0][1] = baralho[random_integer][1];
-
-
-//    cout << nomeCarta[0][0] << " - " << valorCarta[0][1]  << endl;
+    nomeCarta = baralho[random_integer][0];
+    valorCarta = baralho[random_integer][1];
 
     for (int i=1; i<=53; i++){
         if(jogador[i][0] == "" & jogador[i][1] == ""){
-            jogador[i][0] = nomeCarta[0][0];
-            jogador[i][1] = valorCarta[0][1];
+            jogador[i][0] = nomeCarta;
+            jogador[i][1] = valorCarta;
             return;
         }
     }
