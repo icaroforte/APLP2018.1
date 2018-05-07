@@ -7,13 +7,14 @@
 #include <random>
 
 
+
 using  namespace std;
 
 /*
 Variáveis globais
 */
 int somaPontuacao(string baralhoASomar[][2]);
-void adicionaCartaJogador();
+void adicionaCartaJogador(string jogador[][2]);
 void exibeBaralho(string baralhoAExibir[][2]);
 /*
 criação do baralho com vetor bidimensional, armazena nome da carta em string e o respectivo valor em pontos.
@@ -104,20 +105,32 @@ int main(){
 
 //cout << pontuacaoJogadorHumano << endl;
 
-//Adicionando 3 cartas ao jogador
-adicionaCartaJogador();
-adicionaCartaJogador();
-adicionaCartaJogador();
+//Adicionando 3 cartas ao jogador humano
+
+//Adicionando 3 cartas ao jogador maquina
+
+//adicionaCartaJogador(jogadorHumano);
+adicionaCartaJogador(jogadorHumano);
+adicionaCartaJogador(jogadorHumano);
+adicionaCartaJogador(jogadorMaquina);
+adicionaCartaJogador(jogadorMaquina);
+//adicionaCartaJogador(jogadorMaquina);
+//adicionaCartaJogador(jogadorMaquina);
+
 
 //Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano
 pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
+pontuacaoJogadorMaquina = somaPontuacao(jogadorMaquina);
 
 exibeBaralho(jogadorHumano);
 cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
 
+cout <<"---------------------------------" << endl;
+
+exibeBaralho(jogadorMaquina);
+cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
 
 //prints
-//cout << jogadorHumano[0][0] << endl;
 //cout << jogadorHumano[1][0] << endl;
 //cout << jogadorHumano[2][0] << endl;
 //cout << jogadorHumano[3][0] << endl;
@@ -129,14 +142,17 @@ int somaPontuacao(string baralhoASomar[][2]){
     int totalPontos = 0;
 
     for(int i=0; i<=53; i++){
-        totalPontos += atoi(baralhoASomar[i][1].c_str());
+
+        if(baralhoASomar[i][1] != ""){
+            totalPontos += atoi(baralhoASomar[i][1].c_str());
+        }
     }
 
     return totalPontos;
 }
 
 //Função incompleta que adiciona carta ao baralho de um jogador
-void adicionaCartaJogador(){
+void adicionaCartaJogador(string jogador[][2]){
 //Gerando um índice aleatório
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -151,13 +167,14 @@ void adicionaCartaJogador(){
     nomeCarta[0][0] = baralho[random_integer][0];
     valorCarta[0][1] = baralho[random_integer][1];
 
+
 //    cout << nomeCarta[0][0] << " - " << valorCarta[0][1]  << endl;
 
     for (int i=0; i<=53; i++){
-        if(jogadorHumano[i][0] == ""){
-            jogadorHumano[i][0] = nomeCarta[0][0];
-            jogadorHumano[i][1] = valorCarta[0][1];
-            break;
+        if(jogador[i][0] == "" & jogador[i][1] == ""){
+            jogador[i][0] = nomeCarta[0][0];
+            jogador[i][1] = valorCarta[0][1];
+            return;
         }
     }
 
