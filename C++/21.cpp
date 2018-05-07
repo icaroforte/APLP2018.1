@@ -11,18 +11,22 @@
 using  namespace std;
 
 /*
-Variáveis globais
+Funções
 */
 int somaPontuacao(string baralhoASomar[][2]);
 void adicionaCartaJogador(string jogador[][2]);
 void exibeBaralho(string baralhoAExibir[][2]);
+
+/*
+Variáveis globais
+*/
 /*
 criação do baralho com vetor bidimensional, armazena nome da carta em string e o respectivo valor em pontos.
 Onde a primeira dimensão é o nome da carta em string, a segunda dimensão é o valor respectivo da carta.
 Ex: baralho [0][0] - informa "Ás de copas" --------- baralho [0][1] - informa o valor 1
 Obs: Sempre que o segundo índice for zero representa o nome da carta e sempre que o segundo índice for 1 representa o valor.
 */
-std::string baralho[53][2] = {
+std::string baralho[52][2] = {
     {"Ás de copas","1"},
     {"Ás de espadas","1"},
     {"Ás de ouro","1"},
@@ -71,7 +75,6 @@ std::string baralho[53][2] = {
     {"Dama de espadas","10"},
     {"Dama de ouro","10"},
     {"Dama de paus","10"},
-    {"Dama de paus","10"},
     {"Rei de copas","10"},
     {"Rei de espadas","10"},
     {"Rei de ouro","10"},
@@ -79,9 +82,9 @@ std::string baralho[53][2] = {
 };
 
 //Baralho do jogador Humano
-string jogadorHumano [53][2];
+string jogadorHumano [52][2];
 //Baralho do jogador Maquina
-string jogadorMaquina [53][2];
+string jogadorMaquina [52][2];
 //Pontuação do jogador Humano
 int pontuacaoJogadorHumano = 0;
 //Pontuação do jogador Máquina
@@ -117,7 +120,7 @@ adicionaCartaJogador(jogadorMaquina);
 
 
 
-//Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano
+//Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano e máquina
 pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
 pontuacaoJogadorMaquina = somaPontuacao(jogadorMaquina);
 
@@ -128,6 +131,11 @@ cout <<"---------------------------------------------------" << endl;
 
 exibeBaralho(jogadorMaquina);
 cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
+
+//baralho[50][0] = "";
+//baralho[50][1] = "";
+
+//exibeBaralho(baralho);
 
 //prints
 //cout << jogadorHumano[1][0] << endl;
@@ -140,7 +148,7 @@ cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << 
 int somaPontuacao(string baralhoASomar[][2]){
     int totalPontos = 0;
 
-    for(int i=0; i<=53; i++){
+    for(int i=0; i<=52; i++){
 
         if(baralhoASomar[i][1] != ""){
             totalPontos += atoi(baralhoASomar[i][1].c_str());
@@ -155,10 +163,10 @@ void adicionaCartaJogador(string jogador[][2]){
 //Gerando um índice aleatório
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> uni(1,53);
+    std::uniform_int_distribution<int> uni(0,52);
     auto random_integer = uni(rng);
 //exibe o inteiro aleatório gerado
-//cout << "Inteiro aleatório gerado: " << random_integer << endl;
+cout << "Inteiro aleatório gerado: " << random_integer << endl;
 
     string nomeCarta;
     string valorCarta;
@@ -166,7 +174,7 @@ void adicionaCartaJogador(string jogador[][2]){
     nomeCarta = baralho[random_integer][0];
     valorCarta = baralho[random_integer][1];
 
-    for (int i=1; i<=53; i++){
+    for (int i=1; i<=52; i++){
         if(jogador[i][0] == "" & jogador[i][1] == ""){
             jogador[i][0] = nomeCarta;
             jogador[i][1] = valorCarta;
@@ -179,7 +187,7 @@ void adicionaCartaJogador(string jogador[][2]){
 //Função que exibe as cartas e seus respectivos pontos de um baralho
 void exibeBaralho(string baralhoAExibir[][2]){
 
-    for(int i=0; i<=53; i++){
+    for(int i=0; i<=52; i++){
         if(baralhoAExibir[i][0] != "" && baralhoAExibir[i][1] !=""){
             cout << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
         }
