@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>//evolução da stdio.h - Substitui completamente
+#include <random>
 #include <string>
 #include <iterator>
 #include <stdlib.h>
-#include <random>
+
 
 
 
@@ -14,7 +15,11 @@ using  namespace std;
 Funções
 */
 int somaPontuacao(string baralhoASomar[][2]);
-void adicionaCartaJogador(string jogador[][2]);
+void puxarDoBaralho(string jogador[][2]);
+void puxarDoMonte(string jogadorAtual[][2]);
+void puxarCarta(string jogadorAtual[][2]);
+void descartarCarta(string jogadorAtual[][2]);
+void trocarJogador(string jogadorAtual[][2]);
 void exibeBaralho(string baralhoAExibir[][2]);
 int geraValorAleatorio();
 
@@ -27,6 +32,7 @@ Onde a primeira dimensão é o nome da carta em string, a segunda dimensão é o
 Ex: baralho [0][0] - informa "Ás de copas" --------- baralho [0][1] - informa o valor 1
 Obs: Sempre que o segundo índice for zero representa o nome da carta e sempre que o segundo índice for 1 representa o valor.
 */
+
 std::string baralho[52][2] = {
     {"Ás de copas","1"},//0
     {"Ás de espadas","1"},//1
@@ -86,38 +92,25 @@ std::string baralho[52][2] = {
 string jogadorHumano [52][2];
 //Baralho do jogador Maquina
 string jogadorMaquina [52][2];
+//Monte onde fica as cartas descartadas
+string monte [52][2];
+//Jogador da vez
+string jogadorAtual[52][2] = jogadorHumano;
 //Pontuação do jogador Humano
 int pontuacaoJogadorHumano = 0;
 //Pontuação do jogador Máquina
 int pontuacaoJogadorMaquina = 0;
 
 int main(){
-//Teste de cópia de uma carta do baralho pro baralho do jogador
-//Copiando o nome da carta do baralho pro jogador -> jogadorHumano[0][0] = Baralho[0][0]
-//jogadorHumano[0][0] = baralho[0][0];
-//Copiando o valor da carta do baralho pro jogador -> jogadorHumano[0][1] = Baralho[0][1]
-//jogadorHumano[0][1] = baralho[0][1];
-//adicionando apenas valores ao baralho do jogador humano
-//jogadorHumano[1][0] = baralho[35][0];
-//jogadorHumano[1][1] = baralho[35][1];
-//jogadorHumano[2][0] = baralho[23][0];
-//jogadorHumano[5][0] = baralho[23][0];
-//jogadorHumano[5][1] = baralho[23][1];
-
-//Atribuindo o valor da carta do baralho do jogador, a sua variável pontos. O método atoi é pra converter a string em inteiro
-//pontuacaoJogadorHumano += atoi(jogadorHumano[0][1].c_str());
-
-//cout << pontuacaoJogadorHumano << endl;
-
 //Adicionando 3 cartas ao jogador humano
-adicionaCartaJogador(jogadorHumano);
-adicionaCartaJogador(jogadorHumano);
-adicionaCartaJogador(jogadorHumano);
+puxarDoBaralho(jogadorHumano);
+puxarDoBaralho(jogadorHumano);
+puxarDoBaralho(jogadorHumano);
 
 //Adicionando 3 cartas ao jogador maquina
-adicionaCartaJogador(jogadorMaquina);
-adicionaCartaJogador(jogadorMaquina);
-adicionaCartaJogador(jogadorMaquina);
+puxarDoBaralho(jogadorMaquina);
+puxarDoBaralho(jogadorMaquina);
+puxarDoBaralho(jogadorMaquina);
 
 
 //Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano e máquina
@@ -132,7 +125,19 @@ cout <<"---------------------------------------------------" << endl;
 exibeBaralho(jogadorMaquina);
 cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
 
+while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
+    puxarCarta(jogadorAtual);
+    descartarCarta(jogadorAtual);
+    trocarJogador(jogadorAtual);
 
+    exibeBaralho(jogadorHumano);
+    cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
+
+    cout <<"---------------------------------------------------" << endl;
+
+    exibeBaralho(jogadorMaquina);
+    cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
+}
 
 //exibeBaralho(baralho);
 
@@ -140,6 +145,67 @@ cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << 
 //cout << jogadorHumano[1][0] << endl;
 //cout << jogadorHumano[2][0] << endl;
 //cout << jogadorHumano[3][0] << endl;
+
+}
+
+void trocarJogador(string jogadorAtual[][2]){
+    if(jogadorAtual == jogadorHumano){
+        jogadorAtual = jogadorMaquina;
+    }else{
+        jogadorAtual = jogadorHumano;
+    }
+}
+
+//Função para que o jogador pegue uma carta do baralho ou do monte
+void puxarCarta(string jogadorAtual[][2]){
+    int resposta;
+    //cout << sizeof(monte) / sizeof(monte[0])<< endl;(tamanho do array)
+    if(sizeof monte > 0){
+        cout <<"Para puxar carta do baralho digite 1, caso contrário, digite 2" << endl;
+        cin >> resposta;
+
+        while(resposta != 1 & resposta != 2){
+            cout <<"Para puxar carta do baralho digite 1, caso contrário, digite 2" << endl;
+            cin >> resposta;
+        }
+    }else{
+        resposta = 1;
+    }
+
+    if(resposta == 1){
+        puxarDoBaralho(jogadorAtual);
+    }else{
+        puxarDoMonte(jogadorAtual);
+    }
+}
+
+//função para descartar carta no monte
+void descartarCarta(string jogadorAtual[][2]){
+    //Verifica as cartas que tem na mão e escolhe a que quer descartar
+    int resposta;
+    exibeBaralho(jogadorAtual);
+    cout <<"Digite o número da carta que deseja descartar:" << endl;
+    cin >> resposta;
+
+    string nomeCarta;
+    string valorCarta;
+    //Recebe o nome e o valor da carta do monte;
+    nomeCarta = jogadorAtual[resposta-1][0];
+    valorCarta = jogadorAtual[resposta-1][1];
+
+    /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
+    baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
+    */
+    for (int i=1; i<=52; i++){
+        if(monte[i][0] == "" & monte[i][1] == ""){
+            monte[i][0] = nomeCarta;
+            monte[i][1] = valorCarta;
+            //"deletando" a carta do baralho principal já que ele agora pertence ao jogador
+            jogadorAtual[resposta-1][0] = "";
+            jogadorAtual[resposta-1][1] = "";
+            return;
+        }
+    }
 
 }
 
@@ -166,9 +232,37 @@ int geraValorAleatorio(){
     return random_integer;
 }
 
+void puxarDoMonte(string jogador[][2]){
+//a variável i será para procurar no monte qual a carta que está em cima (a que será puxada)
+    int cartaSuperior = sizeof monte;
+    while(baralho[cartaSuperior][0] == ""){
+        cartaSuperior--;
+    }
+
+    string nomeCarta;
+    string valorCarta;
+    //Recebe o nome e o valor da carta do monte;
+    nomeCarta = monte[cartaSuperior][0];
+    valorCarta = monte[cartaSuperior][1];
+
+    /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
+    baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
+    */
+    for (int i=1; i<=52; i++){
+        if(jogador[i][0] == "" & jogador[i][1] == ""){
+            jogador[i][0] = nomeCarta;
+            jogador[i][1] = valorCarta;
+            //"deletando" a carta do baralho principal já que ele agora pertence ao jogador
+            monte[cartaSuperior][0] = "";
+            monte[cartaSuperior][1] = "";
+            return;
+        }
+    }
+
+}
 
 //Função que adiciona carta ao baralho de um jogador sem repetição
-void adicionaCartaJogador(string jogador[][2]){
+void puxarDoBaralho(string jogador[][2]){
 
 //Gerando um índice aleatório
     int valorAleatorio = geraValorAleatorio();
@@ -201,10 +295,9 @@ baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para q
 
 //Função que exibe as cartas e seus respectivos pontos de um baralho
 void exibeBaralho(string baralhoAExibir[][2]){
-
     for(int i=0; i<=52; i++){
-        if(baralhoAExibir[i][0] != "" && baralhoAExibir[i][1] !=""){
-            cout << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
+        if(baralhoAExibir[i][0] != "" & baralhoAExibir[i][1] !=""){
+            cout << i << " - " << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
         }
     }
 
