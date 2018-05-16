@@ -126,9 +126,9 @@ exibeBaralho(jogadorMaquina);
 cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
 
 while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
-    puxarCarta(jogadorAtual);
-    descartarCarta(jogadorAtual);
-    trocarJogador(jogadorAtual);
+    puxarCarta(jogadorHumano);
+    descartarCarta(jogadorHumano);
+    trocarJogador(jogadorHumano);
 
     exibeBaralho(jogadorHumano);
     cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
