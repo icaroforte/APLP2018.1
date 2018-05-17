@@ -111,7 +111,6 @@ int dificuldade = escolheDificuldade();
 iniciarPartida();
 
 while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
-    cout << jogadorAtual << endl;
     if(jogadorAtual.compare(humano) == 0){
         puxarCarta(jogadorHumano);
         descartarCarta(jogadorHumano);
@@ -121,6 +120,7 @@ while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
         trocarJogador();
     }
 
+    cout << "\n" << endl;
     exibeBaralho(jogadorHumano);
     cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
 
@@ -262,7 +262,6 @@ void trocarJogador(){
     }else{
         jogadorAtual = humano;
     }
-    cout << jogadorAtual << endl;
 }
 
 //Função para que o jogador pegue uma carta do baralho ou do monte
