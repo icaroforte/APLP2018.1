@@ -10,6 +10,8 @@ Tulio Henrique Escarião da Nóbrega
  	        
 Rafael de Paula Cadena
 
+Pedro Falcão
+
 Tema: Jogo - 21
 	
 Descrição: 
