@@ -14,6 +14,9 @@ using  namespace std;
 /*
 Funções
 */
+int escolheDificuldade();
+void iniciarPartida();
+bool jogadaDaIA(int dificuldade);
 int somaPontuacao(string baralhoASomar[][2]);
 void puxarDoBaralho(string jogador[][2]);
 void puxarDoMonte(string jogadorAtual[][2]);
@@ -90,45 +93,37 @@ std::string baralho[52][2] = {
 
 //Baralho do jogador Humano
 string jogadorHumano [52][2];
+string humano = "jogadorHumano";
 //Baralho do jogador Maquina
 string jogadorMaquina [52][2];
+string maquina = "jogadorMaquina";
 //Monte onde fica as cartas descartadas
 string monte [52][2];
 //Jogador da vez
-string jogadorAtual[52][2] = jogadorHumano;
+string jogadorAtual = "jogadorHumano";
 //Pontuação do jogador Humano
 int pontuacaoJogadorHumano = 0;
 //Pontuação do jogador Máquina
 int pontuacaoJogadorMaquina = 0;
 
 int main(){
-//Adicionando 3 cartas ao jogador humano
-puxarDoBaralho(jogadorHumano);
-puxarDoBaralho(jogadorHumano);
-puxarDoBaralho(jogadorHumano);
-
-//Adicionando 3 cartas ao jogador maquina
-puxarDoBaralho(jogadorMaquina);
-puxarDoBaralho(jogadorMaquina);
-puxarDoBaralho(jogadorMaquina);
-
-
-//Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano e máquina
-pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
-pontuacaoJogadorMaquina = somaPontuacao(jogadorMaquina);
-
-exibeBaralho(jogadorHumano);
-cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
-
-cout <<"---------------------------------------------------" << endl;
-
-exibeBaralho(jogadorMaquina);
-cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
+int dificuldade = escolheDificuldade();
+iniciarPartida();
 
 while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
-    puxarCarta(jogadorHumano);
-    descartarCarta(jogadorHumano);
-    trocarJogador(jogadorHumano);
+    cout <<"jogadorAtual: " << jogadorAtual << endl;
+    cout <<"jogadorAtual: " << humano << endl;
+    cout << jogadorAtual.compare(humano) << endl;
+    if(jogadorAtual.compare(humano) == 0){
+        puxarCarta(jogadorHumano);
+        descartarCarta(jogadorHumano);
+        trocarJogador(jogadorHumano);
+    }else{
+        jogadaDaIA(dificuldade);
+        puxarCarta(jogadorMaquina);
+        descartarCarta(jogadorMaquina);
+        trocarJogador(jogadorMaquina);
+    }
 
     exibeBaralho(jogadorHumano);
     cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
@@ -148,6 +143,123 @@ while(pontuacaoJogadorHumano != 21 & pontuacaoJogadorMaquina != 21){
 
 }
 
+int escolheDificuldade(){
+    cout << "   Bem vindo ao jogo 21! \n " << endl;
+    cout << "Escolha a dificuldade da partida: \n1 - Fácil \n2 - Médio \n3 - Difícil " << endl;
+
+    string escolhaMenu;
+
+    cout << "Por favor escolha 1, 2 ou 3: \n";
+    cin >> escolhaMenu;
+
+    //Loop para forçar uma escolha válida do menu
+    while (escolhaMenu != "1" & escolhaMenu != "2" & escolhaMenu != "3"){
+        cout << "Opção inválida, por favor escolha 1, 2 ou 3: \n";
+        cin >> escolhaMenu;
+    }
+
+    //Transformando a string dificuldade em um valor int
+    int dificuldade = atoi(escolhaMenu.c_str());
+
+    switch (dificuldade){
+        case 1:
+            cout <<"\nDificuldade escolhida é: Fácil\n" << endl;
+            break;
+
+        case 2:
+            cout <<"\nDificuldade escolhida é: Médio" << endl;
+            break;
+
+        case 3:
+            cout <<"\nDificuldade escolhida é: Difícil" << endl;
+            break;
+    }
+    return dificuldade;
+}
+
+void iniciarPartida(){
+    //Adicionando 3 cartas ao jogador humano
+    puxarDoBaralho(jogadorHumano);
+    puxarDoBaralho(jogadorHumano);
+    puxarDoBaralho(jogadorHumano);
+
+    //Adicionando 3 cartas ao jogador maquina
+    puxarDoBaralho(jogadorMaquina);
+    puxarDoBaralho(jogadorMaquina);
+    puxarDoBaralho(jogadorMaquina);
+
+    //Atribuindo o resultado da função somaPontuacao a variável pontuação do jogador humano e máquina
+    pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
+    pontuacaoJogadorMaquina = somaPontuacao(jogadorMaquina);
+
+    exibeBaralho(jogadorHumano);
+    cout <<"Valor de pontos do jogador humano é: " << pontuacaoJogadorHumano << endl;
+
+    cout <<"---------------------------------------------------" << endl;
+
+    exibeBaralho(jogadorMaquina);
+    cout <<"Valor de pontos do jogador máquina é: " << pontuacaoJogadorMaquina << endl;
+}
+
+bool jogadaDaIA(int dificuldade){
+    //estratégia para o random ficar melhor
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    srand((time_t)ts.tv_nsec);
+
+    //gerando um valor aleatório de [0,100]
+    int random = (rand() % 100) + 1;
+    //cout << "valor random " << random << endl;
+
+    switch(dificuldade){
+        /*
+            Caso 1 - Fácil, independente do valor na mão da máquina, ela sempre vai ter 50% de chance de puxar uma carta.
+        */
+        case 1:
+            if(random >= 0 & random <= 50){
+                return 1;
+            }else{
+                return 0;
+            }
+
+            /*
+            Caso 2 - Médio, tenta simular um humano jogando, onde
+                tem 95% de chance de puxar uma carta se seus pontos forem menores que 13,
+                tem 60% de chance caso sua pontuação esteja entre 13 e 16 pontos,
+                tem 15% de chance caso sua pontuação esteja entre 17 e 18,
+                tem 5% de chance caso sua pontuação seja 19,
+                tem 0% de chance caso sua pontuação seja 20 ou 21.
+            */
+        case 2:
+            if(pontuacaoJogadorMaquina <= 13 & random >= 5){
+                return 1;
+            }else if(pontuacaoJogadorMaquina > 13 & pontuacaoJogadorMaquina <=16 & random >= 40 ){
+                return 1;
+            }else if(pontuacaoJogadorMaquina > 16 & pontuacaoJogadorMaquina <=18 & random >= 85 ){
+                return 1;
+            }else if(pontuacaoJogadorMaquina == 19 & random >= 95 ){
+                return 1;
+            }else if(pontuacaoJogadorMaquina == 20 || pontuacaoJogadorMaquina == 21 ){
+                return 0;
+            }else{
+                return 0;
+            }
+
+            /*
+            Caso 3 - Difícil, a máquina tem conhecimento das suas cartas e caso ela tenha menos pontos
+            que o jogador humano, ela joga.
+            */
+        case 3:
+            if(pontuacaoJogadorMaquina <= pontuacaoJogadorHumano & pontuacaoJogadorMaquina != 21){
+                return 1;
+            }else{
+                return 0;
+            }
+    }
+
+}
+
+
 void trocarJogador(string jogadorAtual[][2]){
     if(jogadorAtual == jogadorHumano){
         jogadorAtual = jogadorMaquina;
@@ -160,7 +272,7 @@ void trocarJogador(string jogadorAtual[][2]){
 void puxarCarta(string jogadorAtual[][2]){
     int resposta;
     //cout << sizeof(monte) / sizeof(monte[0])<< endl;(tamanho do array)
-    if(sizeof monte > 0){
+    if(monte[0][1].compare("") != 0){
         cout <<"Para puxar carta do baralho digite 1, caso contrário, digite 2" << endl;
         cin >> resposta;
 
@@ -196,7 +308,7 @@ void descartarCarta(string jogadorAtual[][2]){
     /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
     baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
     */
-    for (int i=1; i<=52; i++){
+    for (int i=0; i<=51; i++){
         if(monte[i][0] == "" & monte[i][1] == ""){
             monte[i][0] = nomeCarta;
             monte[i][1] = valorCarta;
@@ -212,14 +324,11 @@ void descartarCarta(string jogadorAtual[][2]){
 //Função que recebe um array bidimensional baralho e soma os valores das cartas no seu baralho
 int somaPontuacao(string baralhoASomar[][2]){
     int totalPontos = 0;
-
-    for(int i=0; i<=52; i++){
-
+    for(int i=0; i<=51; i++){
         if(baralhoASomar[i][1] != ""){
             totalPontos += atoi(baralhoASomar[i][1].c_str());
         }
     }
-
     return totalPontos;
 }
 
@@ -248,7 +357,7 @@ void puxarDoMonte(string jogador[][2]){
     /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
     baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
     */
-    for (int i=1; i<=52; i++){
+    for (int i=0; i<=51; i++){
         if(jogador[i][0] == "" & jogador[i][1] == ""){
             jogador[i][0] = nomeCarta;
             jogador[i][1] = valorCarta;
@@ -263,7 +372,6 @@ void puxarDoMonte(string jogador[][2]){
 
 //Função que adiciona carta ao baralho de um jogador sem repetição
 void puxarDoBaralho(string jogador[][2]){
-
 //Gerando um índice aleatório
     int valorAleatorio = geraValorAleatorio();
 //Este WHILE serve para que se a posição random no baralho principal esteja vazia (já tenha sido usada), ele gera um novo número random.
@@ -280,7 +388,7 @@ void puxarDoBaralho(string jogador[][2]){
 /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
 baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
 */
-    for (int i=1; i<=52; i++){
+    for (int i=0; i<=51; i++){
         if(jogador[i][0] == "" & jogador[i][1] == ""){
             jogador[i][0] = nomeCarta;
             jogador[i][1] = valorCarta;
@@ -295,9 +403,9 @@ baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para q
 
 //Função que exibe as cartas e seus respectivos pontos de um baralho
 void exibeBaralho(string baralhoAExibir[][2]){
-    for(int i=0; i<=52; i++){
+    for(int i=0; i<=51; i++){
         if(baralhoAExibir[i][0] != "" & baralhoAExibir[i][1] !=""){
-            cout << i << " - " << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
+            cout << i + 1 << " - " << baralhoAExibir[i][0] << " - " << baralhoAExibir[i][1] << endl;
         }
     }
 
