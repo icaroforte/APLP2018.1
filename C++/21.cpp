@@ -127,7 +127,11 @@ int main(){
 
 		cout << "\n" << endl;
 		int cartaSuperior = contarArray(monte) - 1;
-		cout <<"O topo do monte (descarte) é: " << monte[cartaSuperior][0] << endl;
+		if(cartaSuperior == -1){
+            cout <<"O monte ainda não tem carta" << endl;
+		}else{
+            cout <<"O topo do monte (descarte) é: " << monte[cartaSuperior][0] << endl;
+		}
 		cout <<"---------------------------------------------------" << endl;
 		exibeBaralho(jogadorHumano);
 		pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
@@ -215,10 +219,9 @@ bool jogadaDaIA(int dificuldade){
     //gerando um valor aleatório de [0,100]
     int random = (rand() % 100) + 1;
     //cout << "valor random " << random << endl;
-    cout << "entrou na jogada IA" << endl;
     switch(dificuldade){
         /*
-            Caso 1 - Fácil, independente do valor na mão da máquina, ela sempre vai ter 50% de chance de puxar uma carta.
+            Caso 1 - Fácil, independente do valor na mão da máquina, ela sempre vai ter 50% de chance de descartar uma carta.
         */
         case 1:
             if(random >= 0 & random <= 50){
@@ -310,7 +313,6 @@ void puxarCarta(string jogadorAtual[][2]){
         }
 
     } else {
-        cout << "entrou aqui" << endl;
         puxarDoBaralho(jogadorAtual);
     }
 
