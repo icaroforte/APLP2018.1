@@ -114,6 +114,7 @@ int main(){
 	do {
 		if (pontuacaoJogadorHumano == 21 | pontuacaoJogadorMaquina == 21) {
 			gameOver = true;
+			break;
 		}
 		if(jogadorAtual.compare(humano) == 0){
 		    puxarCarta(jogadorHumano);
@@ -325,7 +326,7 @@ void descartarCarta(string jogadorAtual[][2]){
         do {
     		cout <<"\nDeseja descartar uma carta? Digite 1 para sim, 2 para não." << endl;
     		cin >> respostaDescarte;
-    		if (respostaDescarte < 1 & respostaDescarte > 2) {
+    		if (respostaDescarte < 1 | respostaDescarte > 2) {
     			cout << "----- RESPOSTA INVALIDA -----" << endl;
     		} else {
     			respostaValida = true;
