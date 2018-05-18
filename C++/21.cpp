@@ -125,6 +125,8 @@ int main(){
 		}
 
 		cout << "\n" << endl;
+		int cartaSuperior = contarArray(monte) - 1;
+		cout <<"O topo do monte (descarte) é: " << monte[cartaSuperior][0] << endl;
 		cout <<"---------------------------------------------------" << endl;
 		exibeBaralho(jogadorHumano);
 		pontuacaoJogadorHumano = somaPontuacao(jogadorHumano);
