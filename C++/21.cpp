@@ -21,8 +21,10 @@ void puxarCarta(string jogadorAtual[][2]);
 void descartarCarta(string jogadorAtual[][2]);
 void trocarJogador();
 int exibeBaralho(string baralhoAExibir[][2]);
-int geraValorAleatorio();
+int geraValorAleatorio(int max);
 int contarArray(string array[][2]);
+void atualizarArray(string array[][2]);
+void descartarParaAI(string jogadorAtual[][2]);
 
 /*
 Variáveis globais
@@ -219,9 +221,8 @@ bool jogadaDaIA(int dificuldade){
             if(random >= 0 & random <= 50){
                 puxarCarta(jogadorMaquina);
                 if (pontuacaoJogadorMaquina > 21){
-                    descartarCarta(jogadorMaquina);
+                    descartarParaAI(jogadorMaquina);
                 }
-                cout << "ia puxou do baralho" << endl;
                 return 1;
             }else{
                 return 0;
@@ -333,17 +334,17 @@ void descartarCarta(string jogadorAtual[][2]){
         if(respostaDescarte == 1){
             int resposta;
             int lastCardNumber = exibeBaralho(jogadorAtual);
-            bool respostaValida = false;
+            bool respostaValida2 = false;
 
             do {
             	cout <<"\nDigite o número da carta que deseja descartar:" << endl;
             	cin >> resposta;
-            	if (resposta < 1 | resposta > lastCardNumber) {
+            	if (resposta < 1 || resposta > lastCardNumber) {
             		cout <<"Opção inválida. Digite o número da carta que deseja descartar: " << endl;
             	} else {
-            		respostaValida = true;
+            		respostaValida2 = true;
             	}
-            } while(!respostaValida);
+            } while(!respostaValida2);
 
             string nomeCarta;
             string valorCarta;
@@ -416,20 +417,17 @@ int somaPontuacao(string baralhoASomar[][2]){
 }
 
 //Função que retorna um valor aleatório entre [0,51]
-int geraValorAleatorio(){
+int geraValorAleatorio(int max){
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_int_distribution<int> uni(0,51);
+    std::uniform_int_distribution<int> uni(0,max);
     auto random_integer = uni(rng);
     return random_integer;
 }
 
 void puxarDoMonte(string jogador[][2]){
 //a variável i será para procurar no monte qual a carta que está em cima (a que será puxada)
-    int cartaSuperior = contarArray(monte);
-    while(baralho[cartaSuperior][0] == ""){
-        cartaSuperior--;
-    }
+    int cartaSuperior = contarArray(monte) - 1;
 
     string nomeCarta;
     string valorCarta;
@@ -447,6 +445,7 @@ void puxarDoMonte(string jogador[][2]){
             //"deletando" a carta do baralho principal já que ele agora pertence ao jogador
             monte[cartaSuperior][0] = "";
             monte[cartaSuperior][1] = "";
+            atualizarArray(jogador);
             return;
         }
     }
@@ -456,10 +455,10 @@ void puxarDoMonte(string jogador[][2]){
 //Função que adiciona carta ao baralho de um jogador sem repetição
 void puxarDoBaralho(string jogador[][2]){
 //Gerando um índice aleatório
-    int valorAleatorio = geraValorAleatorio();
+    int valorAleatorio = geraValorAleatorio(51);
 //Este WHILE serve para que se a posição random no baralho principal esteja vazia (já tenha sido usada), ele gera um novo número random.
     while(baralho[valorAleatorio][0] == ""){
-        valorAleatorio = geraValorAleatorio();
+        valorAleatorio = geraValorAleatorio(51);
     }
 //cout << "Inteiro aleatório gerado: " << valorAleatorio << endl;
 
@@ -503,4 +502,35 @@ int contarArray(string array[][2]) {
 			counter++;
 		}
 	} return counter;
+}
+
+// Este método atualiza as posições de um array, mandando elementos para possíveis espaços vazios à esquerda
+// e finaliza quando não houver mais elementos a serem transferidos.
+void atualizarArray(string array[][2]) {
+	for (int i = 0; i < 52; i++) { // Este loop contabilizará os espaços vazios
+		if (array[i][0] == "" & array[i][1] == "") {
+			int espacosVazios = 0;
+			for (int j = i; j < 52; j++) { // Este loop procura por elementos para transferir
+				if (array[j][0] != "" & array[j][1] != "") {
+					array[i][0] = array[j][0];
+					array[i][1] = array[j][1];
+					array[j][0] = "";
+					array[j][1] = "";
+				} else { espacosVazios++; }
+			} if (espacosVazios == 51 - i) { // Se só houverem espaços vazios, finalize o método.
+				return;
+			}
+		}
+	}
+}
+
+void descartarParaAI(string jogadorAtual[][2]) {
+	int indiceBase = geraValorAleatorio(contarArray(jogadorAtual)-1);
+	int indiceAlvo = contarArray(monte);
+	monte[indiceAlvo][0] = jogadorAtual[indiceBase][0];
+	monte[indiceAlvo][1] = jogadorAtual[indiceAlvo][1];
+	jogadorAtual[indiceBase][0] = "";
+	jogadorAtual[indiceBase][1] = "";
+	string nomeCarta = monte[indiceAlvo][0];
+	cout << "Carta descartada pela IA: " << nomeCarta << endl;
 }
