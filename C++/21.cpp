@@ -6,9 +6,6 @@
 #include <iterator>
 #include <stdlib.h>
 
-
-
-
 using  namespace std;
 
 /*
@@ -117,8 +114,8 @@ int main(){
 			gameOver = true;
 		}
 		if(jogadorAtual.compare(humano) == 0){
-			descartarCarta(jogadorHumano);
-			puxarCarta(jogadorHumano);
+		    puxarCarta(jogadorHumano);
+		    descartarCarta(jogadorHumano);
 			trocarJogador();
 		}else{
 			jogadaDaIA(dificuldade);
@@ -213,13 +210,18 @@ bool jogadaDaIA(int dificuldade){
     //gerando um valor aleatório de [0,100]
     int random = (rand() % 100) + 1;
     //cout << "valor random " << random << endl;
-
+    cout << "entrou na jogada IA" << endl;
     switch(dificuldade){
         /*
             Caso 1 - Fácil, independente do valor na mão da máquina, ela sempre vai ter 50% de chance de puxar uma carta.
         */
         case 1:
             if(random >= 0 & random <= 50){
+                puxarCarta(jogadorMaquina);
+                if (pontuacaoJogadorMaquina > 21){
+                    descartarCarta(jogadorMaquina);
+                }
+                cout << "ia puxou do baralho" << endl;
                 return 1;
             }else{
                 return 0;
@@ -273,64 +275,109 @@ void trocarJogador(){
 
 //Função para que o jogador pegue uma carta do baralho ou do monte
 void puxarCarta(string jogadorAtual[][2]){
-    int resposta;
-    //cout << sizeof(monte) / sizeof(monte[0])<< endl;(tamanho do array)
-    cout <<"\nPara puxar carta do baralho digite 1, para puxar do monte, digite 2" << endl;
-    cin >> resposta;
-    cout << "----------" << endl;
 
-    while(resposta != 1 & resposta != 2){
-        cout <<"\nOpção inválida. Para puxar carta do baralho digite 1, para puxar do monte, digite 2" << endl;
+    if (jogadorAtual == jogadorHumano){
+
+        int resposta;
+        //cout << sizeof(monte) / sizeof(monte[0])<< endl;(tamanho do array)
+        cout <<"\nPara puxar carta do baralho digite 1, para puxar do monte, digite 2" << endl;
         cin >> resposta;
         cout << "----------" << endl;
-    }
 
-    if(resposta == 2 & monte[0][1].compare("") == 0){
-        cout <<"\nMonte vazio, puxando automaticamente do baralho...\n" << endl;
-        resposta = 1;
-        cout << "----------" << endl;
-    }
+        while(resposta != 1 & resposta != 2){
+            cout <<"\nOpção inválida. Para puxar carta do baralho digite 1, para puxar do monte, digite 2" << endl;
+            cin >> resposta;
+            cout << "----------" << endl;
+        }
 
-    if(resposta == 1){
+        if(resposta == 2 & monte[0][1].compare("") == 0){
+            cout <<"\nMonte vazio, puxando automaticamente do baralho...\n" << endl;
+            resposta = 1;
+            cout << "----------" << endl;
+        }
+
+        if(resposta == 1){
+            puxarDoBaralho(jogadorAtual);
+            exibeBaralho(jogadorAtual);
+        }else{
+            puxarDoMonte(jogadorAtual);
+            exibeBaralho(jogadorAtual);
+
+        }
+
+    } else {
+        cout << "entrou aqui" << endl;
         puxarDoBaralho(jogadorAtual);
-        exibeBaralho(jogadorAtual);
-    }else{
-        puxarDoMonte(jogadorAtual);
-        exibeBaralho(jogadorAtual);
-
     }
+
 }
 
 //função para descartar carta no monte
 void descartarCarta(string jogadorAtual[][2]){
-    //Verifica as cartas que tem na mão e escolhe a que quer descartar
-    int respostaDescarte;
-    bool respostaValida = false;
-    do {
-		cout <<"\nDeseja descartar uma carta? Digite 1 para sim, 2 para não." << endl;
-		cin >> respostaDescarte;
-		if (respostaDescarte < 1 & respostaDescarte > 2) {
-			cout << "----- RESPOSTA INVALIDA -----" << endl;
-		} else {
-			respostaValida = true;
-			cout << "----------" << endl;
-		}
-    } while (!respostaValida);
 
-    if(respostaDescarte == 1){
-        int resposta;
-        int lastCardNumber = exibeBaralho(jogadorAtual);
+    if (jogadorAtual == jogadorHumano) {
+       //Verifica as cartas que tem na mão e escolhe a que quer descartar
+        int respostaDescarte;
         bool respostaValida = false;
-
         do {
-        	cout <<"\nDigite o número da carta que deseja descartar:" << endl;
-        	cin >> resposta;
-        	if (resposta < 1 | resposta > lastCardNumber) {
-        		cout <<"Opção inválida. Digite o número da carta que deseja descartar: " << endl;
-        	} else {
-        		respostaValida = true;
-        	}
-        } while(!respostaValida);
+    		cout <<"\nDeseja descartar uma carta? Digite 1 para sim, 2 para não." << endl;
+    		cin >> respostaDescarte;
+    		if (respostaDescarte < 1 & respostaDescarte > 2) {
+    			cout << "----- RESPOSTA INVALIDA -----" << endl;
+    		} else {
+    			respostaValida = true;
+    			cout << "----------" << endl;
+    		}
+        } while (!respostaValida);
+
+        if(respostaDescarte == 1){
+            int resposta;
+            int lastCardNumber = exibeBaralho(jogadorAtual);
+            bool respostaValida = false;
+
+            do {
+            	cout <<"\nDigite o número da carta que deseja descartar:" << endl;
+            	cin >> resposta;
+            	if (resposta < 1 | resposta > lastCardNumber) {
+            		cout <<"Opção inválida. Digite o número da carta que deseja descartar: " << endl;
+            	} else {
+            		respostaValida = true;
+            	}
+            } while(!respostaValida);
+
+            string nomeCarta;
+            string valorCarta;
+            //Recebe o nome e o valor da carta do monte;
+            nomeCarta = jogadorAtual[resposta-1][0];
+            valorCarta = jogadorAtual[resposta-1][1];
+
+            /*Este FOR serve para atribuir o nome e o valor da carta do baralho a primeira posição vazia encontrada no
+            baralho do jogador. Ao mesmo tempo, "deleta" a carta do baralho principal para que não possa ser usada mais de uma vez.
+            */
+            for (int i=0; i<=51; i++){
+                if(monte[i][0] == "" & monte[i][1] == ""){
+                    monte[i][0] = nomeCarta;
+                    monte[i][1] = valorCarta;
+                    //"deletando" a carta do baralho principal já que ele agora pertence ao jogador
+                    jogadorAtual[resposta-1][0] = "";
+                    jogadorAtual[resposta-1][1] = "";
+                    cout << "Carta descartada: " << nomeCarta << endl;
+                    cout << "=========== FIM DE TURNO ===========" << endl;
+                    return;
+                }
+            }
+        }
+
+    } else {
+        int lastCardNumber = exibeBaralho(jogadorAtual);
+        cout <<"last card number IA"<< lastCardNumber << endl;
+        struct timespec ts;
+	    clock_gettime(CLOCK_MONOTONIC, &ts);
+	    srand((time_t)ts.tv_nsec);
+
+        //gerando um valor aleatório de [0,lastCardNumber]
+        int resposta = (rand() % lastCardNumber) + 1;
+        cout << "resposta do descarrte IA"<< resposta << endl;
 
         string nomeCarta;
         string valorCarta;
@@ -348,12 +395,13 @@ void descartarCarta(string jogadorAtual[][2]){
                 //"deletando" a carta do baralho principal já que ele agora pertence ao jogador
                 jogadorAtual[resposta-1][0] = "";
                 jogadorAtual[resposta-1][1] = "";
-                cout << "Carta descartada: " << nomeCarta << endl;
+                cout << "Carta descartada pela IA: " << nomeCarta << endl;
                 cout << "=========== FIM DE TURNO ===========" << endl;
                 return;
             }
         }
     }
+
 }
 
 //Função que recebe um array bidimensional baralho e soma os valores das cartas no seu baralho
