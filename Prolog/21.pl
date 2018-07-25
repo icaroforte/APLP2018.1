@@ -32,8 +32,12 @@ opcao(1):-
     write(NomeCarta), write(" "),
     pegaElementoLista(1, ValorCarta, BaralhoValorCarta), %Pega o elemento 1 da lista BaralhoValorCarta
     write(ValorCarta),nl,
-    tamanhoLista(BaralhoNomeCarta, Tamanho), %Informa o tamanho da lista passada.
-    write(Tamanho),nl, 
+    tamanhoLista(BaralhoNomeCarta, TamanhoBaralhoNomeCarta), %Informa o tamanho da lista passada.
+    write("Tamanho Inicial do baralho: "),write(TamanhoBaralhoNomeCarta),nl,
+    remover(NomeCarta, BaralhoNomeCarta, NovoBaralhoNomeCarta),nl, %removendo a carta do baralho
+    write(NovoBaralhoNomeCarta),nl,
+    tamanhoLista(NovoBaralhoNomeCarta, NovoTamanhoBaralhoNomeCarta),nl,
+    write("Novo tamanho do baralho após remoção: "), write(NovoTamanhoBaralhoNomeCarta),nl,nl,
     iniciarPartida().
 
 opcao(2):-
@@ -58,6 +62,10 @@ tamanhoLista([], 0).
 tamanhoLista([_ | R], N) :-
 tamanhoLista(R, N1),
 N is N1+1.
+
+remover(X, [X | C], C).
+remover(X, [Y | C], [Y | D]) :-
+remover(X, C, D).
 
     
 main:-
