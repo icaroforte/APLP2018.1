@@ -94,7 +94,12 @@ opcao(1):-
     sum_list(BaralhoHumanoValor1,PontuacaoJogadorHumano),
     write("Pontuação do jogodor humano: "), write(PontuacaoJogadorHumano),nl,
     
-    write("--------------------------"),
+    
+    %Aqui é só colocar depois o resultado da soma da lista da pontuação do jogador máquina para comparação.
+    resultado(PontuacaoJogadorHumano,10),
+    write("-------------------------------------------------------"),
+    
+    % --------------------------- 1° Carta Máquina ------------------------- %
     
     
     %OBS: Quando for fazer o jogador máquina USAR O BARALHO DE ONDE PAROU, OU SEJA, BaralhoNomeCarta2 e BaralhoValorCarta2!!!
@@ -149,6 +154,10 @@ sum_list([], 0).
 sum_list([H|T], Sum) :-
    sum_list(T, Rest),
    Sum is H + Rest.
-    
+
+resultado(P1, P2):- P1 > P2, write("Jogador humano venceu"), nl.
+resultado(P1, P2):- P1 < P2, write("Jogador máquina venceu"), nl.
+resultado(P1, P1):- write("Empate!!!"), nl.
+   
 main:-
     executaMenu().
