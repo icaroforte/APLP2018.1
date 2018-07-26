@@ -1,8 +1,3 @@
-%[X,Y|Cauda] = [1,2,3].
-%-pertence(X,[X|Z]).
-%-insere(H, D, [H|D]).
-
-%Lista do tipo [H|T], Onde H é a cabeça e T é o resto da lista.
 :- initialization main.
 
 
@@ -29,14 +24,21 @@ opcao(1):-
     
     % A ideia é fazer 2 baralhos, um com os nomes da carta, outro com os valores delas, então quando eu quiser a carta da posição 30, eu utilizo pegaElementoLista(30, NomeCarta, BaralhoNomeCarta) e também utilizo (30, ValorCarta, BaralhoValorCarta).   
     
+    % -------------------------- 1° Carta Humano ----------------------------- %
     
-    %Buscando elemento nas listas
-    pegaElementoLista(1, NomeCarta, BaralhoNomeCarta), %Pega o elemento 1 da lista BaralhoNomeCarta
-    write(NomeCarta), write(" "),
-    pegaElementoLista(1, ValorCarta, BaralhoValorCarta), %Pega o elemento 1 da lista BaralhoValorCarta
-    write(ValorCarta),nl,
+    %Pegando o tamanho do baralho inicial.
     tamanhoLista(BaralhoNomeCarta, TamanhoBaralhoNomeCarta), %Informa o tamanho da lista passada.
-    write("Tamanho Inicial do baralho: "),write(TamanhoBaralhoNomeCarta),nl,
+    write("Tamanho Inicial do baralho: "), write(TamanhoBaralhoNomeCarta), nl,
+    
+    %Gerando um valor aleatório do tamanho do baralho inicial partindo de [1;52].
+    random_between(1, TamanhoBaralhoNomeCarta, Random), nl,
+    write("Posição random: "), write(Random), nl,
+
+    %Buscando elemento nas listas
+    pegaElementoLista(Random, NomeCarta, BaralhoNomeCarta), %Pega o elemento 1 da lista BaralhoNomeCarta
+    write(NomeCarta), write(" "),
+    pegaElementoLista(Random, ValorCarta, BaralhoValorCarta), %Pega o elemento 1 da lista BaralhoValorCarta
+    write(ValorCarta),nl,
     
     %Inserindo valores buscados acima, OBS: Tem de ficar atento ao índice que tá sendo usado, começa em 1 e incrementa, se começar de 2, 0, ou outro valor, quebra o código.
     insert_at(NomeCarta, [] , 1, BaralhoHumano),
@@ -48,6 +50,7 @@ opcao(1):-
     
     %removendo a carta do baralho
     remover(NomeCarta, BaralhoNomeCarta, NovoBaralhoNomeCarta),nl, 
+    
     %Imprimindo o baralho
     write(NovoBaralhoNomeCarta),nl,
     tamanhoLista(NovoBaralhoNomeCarta, NovoTamanhoBaralhoNomeCarta),nl,
@@ -57,6 +60,10 @@ opcao(1):-
     remover(ValorCarta, BaralhoValorCarta, NovoBaralhoValorCarta),nl, 
     tamanhoLista(NovoBaralhoValorCarta, NovoTamanhoBaralhoValorCarta),nl,
     write("Novo tamanho do baralho de valores após remoção: "), write(NovoTamanhoBaralhoValorCarta),nl,nl,
+    
+    % --------------------------- 2° Carta Humano ------------------------- %
+    
+    
     
     %Pronto, agora só falta adicionar 2 cartas iniciais para cada jogador...
     %Precisa modificar o nome das variáveis que tá um pouco confuso e ruim pra ler
