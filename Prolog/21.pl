@@ -90,6 +90,10 @@ opcao(1):-
     %Imprimindo o baralho
     write(BaralhoNomeCarta2),nl,nl,
     
+    
+    sum_list(BaralhoHumanoValor1,PontuacaoJogadorHumano),
+    write("Pontuação do jogodor humano: "), write(PontuacaoJogadorHumano),nl,
+    
     write("--------------------------"),
     
     
@@ -100,6 +104,8 @@ opcao(1):-
     %Precisa criar métodos para organizar as coisas
     %Precisa criar o jogador máquina similar ao jogador humano criado
     
+    
+    %Aqui deve ser alterado passando como parâmetros os dados acima, o baralho novo, a pontuação, essas coisas...
     iniciarPartida().
 
 opcao(2):-
@@ -138,7 +144,11 @@ insert_at(X,L,K,R) :-
 remove_at(X,[X|Xs],1,Xs).
 remove_at(X,[Y|Xs],K,[Y|Ys]) :- K > 1, 
    K1 is K - 1, remove_at(X,Xs,K1,Ys).
-    
+
+sum_list([], 0).
+sum_list([H|T], Sum) :-
+   sum_list(T, Rest),
+   Sum is H + Rest.
     
 main:-
     executaMenu().
