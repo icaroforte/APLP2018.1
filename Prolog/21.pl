@@ -49,27 +49,56 @@ opcao(1):-
     write(BaralhoHumanoValor),nl,
     
     %removendo a carta do baralho
-    remover(NomeCarta, BaralhoNomeCarta, NovoBaralhoNomeCarta),nl, 
+    remover(NomeCarta, BaralhoNomeCarta, BaralhoNomeCarta1),nl, 
+    remover(ValorCarta, BaralhoValorCarta, BaralhoValorCarta1),nl, 
     
     %Imprimindo o baralho
-    write(NovoBaralhoNomeCarta),nl,
-    tamanhoLista(NovoBaralhoNomeCarta, NovoTamanhoBaralhoNomeCarta),nl,
-    write("Novo tamanho do baralho após remoção: "), write(NovoTamanhoBaralhoNomeCarta),nl,nl,
-    
-    %removendo o valor da carta do baralho
-    remover(ValorCarta, BaralhoValorCarta, NovoBaralhoValorCarta),nl, 
-    tamanhoLista(NovoBaralhoValorCarta, NovoTamanhoBaralhoValorCarta),nl,
-    write("Novo tamanho do baralho de valores após remoção: "), write(NovoTamanhoBaralhoValorCarta),nl,nl,
+    write(BaralhoNomeCarta1),nl,
     
     % --------------------------- 2° Carta Humano ------------------------- %
     
     
+    write("------------------------------------------------------------"),nl,
     
-    %Pronto, agora só falta adicionar 2 cartas iniciais para cada jogador...
+
+    %Pega o tamanho do baralho
+    tamanhoLista(BaralhoNomeCarta1, TamanhoBaralhoNomeCarta1),nl,
+    write("Novo tamanho do baralho após remoção: "), write(TamanhoBaralhoNomeCarta1),nl,
+    
+    %Gerando um valor aleatório do tamanho do baralho.
+    random_between(1, TamanhoBaralhoNomeCarta1, Random1), nl,
+    write("Posição random: "), write(Random1), nl,
+    
+    %Buscando elemento nas listas
+    pegaElementoLista(Random1, NomeCarta1, BaralhoNomeCarta1), %Pega o elemento 1 da lista BaralhoNomeCarta
+    write(NomeCarta1), write(" "),
+    pegaElementoLista(Random1, ValorCarta1, BaralhoValorCarta1), %Pega o elemento 1 da lista BaralhoValorCarta
+    write(ValorCarta1),nl,
+    
+    %Inserindo valores buscados acima, OBS: Tem de ficar atento ao índice que tá sendo usado, começa em 1 e incrementa, se começar de 2, 0, ou outro valor, quebra o código.
+    insert_at(NomeCarta1, BaralhoHumano , 2, BaralhoHumano1),
+    write("Baralho Humano: "),
+    write(BaralhoHumano1),
+    insert_at(ValorCarta1, BaralhoHumanoValor, 2, BaralhoHumanoValor1),
+    write(" "),
+    write(BaralhoHumanoValor1),nl,
+    
+    %removendo a carta do baralho
+    remover(NomeCarta1, BaralhoNomeCarta1, BaralhoNomeCarta2),nl, 
+    remover(ValorCarta1, BaralhoValorCarta1, BaralhoValorCarta2),nl, 
+    
+    %Imprimindo o baralho
+    write(BaralhoNomeCarta2),nl,nl,
+    
+    write("--------------------------"),
+    
+    
+    %OBS: Quando for fazer o jogador máquina USAR O BARALHO DE ONDE PAROU, OU SEJA, BaralhoNomeCarta2 e BaralhoValorCarta2!!!
+    %
+    %Pronto, agora só falta adicionar 2 cartas iniciais para cada jogador... Jogador Humano já feito! Falta a máquina
     %Precisa modificar o nome das variáveis que tá um pouco confuso e ruim pra ler
     %Precisa criar métodos para organizar as coisas
     %Precisa criar o jogador máquina similar ao jogador humano criado
-    %Precisa criar o random
     
     iniciarPartida().
 
@@ -82,10 +111,12 @@ opcao(3):-
 opcao(_):-
     write("Opção inválida. Selecione outra opção: "),
     executaMenu().
-
+    
 iniciarPartida():-
     write("Início da partida").
 
+    
+%-------------- Funções para usar -------------------     
 pegaElementoLista(1, X, [X | _]).
 pegaElementoLista(N, X, [_ | Y]) :-
     pegaElementoLista(M, X, Y),
