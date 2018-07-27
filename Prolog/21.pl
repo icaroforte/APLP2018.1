@@ -1,133 +1,140 @@
 :- initialization main.
 
-
-executaMenu():-
-    write("---------------------"), nl,
+main:-
+    write("----------------------------------------------------------------------"), nl,
     write("Projeto APLP - Prolog"), nl,
     write("JOGO 21 - BlackJack"), nl,
-    write("---------------------"), nl,
-    write("Escolha uma dificuldade:"), nl,
-    write("1 - Fácil"), nl,
-    write("2 - Médio"), nl,
-    write("3 - Difícil"), nl,
-    write("4 - Sair"), nl,
-    read(OPCAO),
-    opcao(OPCAO).
+    write("Autores:"), nl,
+    write("    Ícaro Forte"), nl,
+    write("    Pedro Augustus"), nl,
+    write("    Rafael de Paula"), nl,
+    write("    Tulio Henrique"), nl,
+    write("    Yago da Costa"), nl,
+    write("----------------------------------------------------------------------"), nl,
+    
+    % Um baralho para os nomes das cartas, outro baralho para os valores delas. Qualquer operação é realizada em ambas as listas para evitar inconsistências.
+    BNomes = ["As de copas", "As de espadas", "As de ouro", "As de paus", "Dois de copas","Dois de espadas", "Dois de ouro", "Dois de paus", "Tres de copas", "Tres de espadas", "Tres de ouro", "Tres de paus", "Quatro de copas", "Quatro de espadas", "Quatro de ouro", "Quatro de paus", "Cinco de copas", "Cinco de espadas", "Cinco de ouro", "Cinco de paus", "Seis de copas", "Seis de espadas", "Seis de ouro", "Seis de paus", "Sete de copas", "Sete de espadas", "Sete de ouro", "Sete de paus", "Oito de copas", "Oito de espadas", "Oito de ouro", "Oito de paus", "Nove de copas", "Nove de espadas", "Nove de ouro", "Nove de paus", "Dez de copas", "Dez de espadas", "Dez de ouro", "Dez de paus", "Valete de copas", "Valete de espadas", "Valete de ouro", "Valete de paus", "Dama de copas", "Dama de espadas", "Dama de ouro", "Dama de paus", "Rei de copas", "Rei de espadas", "Rei de ouro", "Rei de paus"],
+    BValores = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    
+    write("======================== Inicializando o Jogo ========================"),nl,
+    % --------------------------  1ª Carta Humano ----------------------------- %
+    write("Humano: "),
+    puxarCarta(BNomes,BValores,[],[],BNomes1,BValores1,BHumano,BHumanoVal),
+    
+    % --------------------------- Puxar 2ª Carta Humano ------------------------- %
+    puxarCarta(BNomes1,BValores1,BHumano,BHumanoVal,BNomes2,BValores2,BHumano1,BHumanoVal1),
+    
+    % --------------------------- Puxar 1ª Carta Máquina ------------------------- 
+    write("Maquina: "),
+    puxarCarta(BNomes2,BValores2,[],[],BNomes3,BValores3,BMaquina,BMaquinaVal),
 
- 
+    % --------------------------- Puxar 2ª Carta Máquina ------------------------- %
+    puxarCarta(BNomes3,BValores3,BMaquina,BMaquinaVal,BNomes4,BValores4,BMaquina1,BMaquinaVal1),
+
+    nl,
+    sum_list(BHumanoVal1,PontuacaoHumano),
+    write("Pontuação inicial do jogador Humano: "), write(PontuacaoHumano),nl,
+    sum_list(BMaquinaVal1,PontuacaoMaquina),
+    write("Pontuação inicial do jogador Máquina: "), write(PontuacaoMaquina),nl,
+
+    promptDraw(PontuacaoHumano,PontuacaoMaquina,""),
+    round(BNomes4,BValores4,BHumano1,BHumanoVal1,BMaquina1,BMaquinaVal1,1).
+
+round(BNomes,BValores,BHumano,BHumanoVal,BMaquina,BMaquinaVal,Round):-
+    write("Rodada: "), write(Round),nl,
+    % --------------------------- Carta Humano ------------------------- %
+    write("Humano: "),
+    puxarCarta(BNomes,BValores,BHumano,BHumanoVal,BNomes1,BValores1,BHumano1,BHumanoVal1),
+
+    % --------------------------- Carta Máquina ------------------------- %
+    write("Maquina: "),
+    puxarCarta(BNomes1,BValores1,BMaquina,BMaquinaVal,BNomes2,BValores2,BMaquina1,BMaquinaVal1),
     
-opcao(1):-
-    write("Dificuldade escolhida: Fácil"), nl,
-    
-    BaralhoNomeCarta = ["As de copas", "As de espadas", "As de ouro", "As de paus", "Dois de copas","Dois de espadas", "Dois de ouro", "Dois de paus", "Tres de copas", "Tres de espadas", "Tres de ouro", "Tres de paus", "Quatro de copas", "Quatro de espadas", "Quatro de ouro", "Quatro de paus", "Cinco de copas", "Cinco de espadas", "Cinco de ouro", "Cinco de paus", "Seis de copas", "Seis de espadas", "Seis de ouro", "Seis de paus", "Sete de copas", "Sete de espadas", "Sete de ouro", "Sete de paus", "Oito de copas", "Oito de espadas", "Oito de ouro", "Oito de paus", "Nove de copas", "Nove de espadas", "Nove de ouro", "Nove de paus", "Dez de copas", "Dez de espadas", "Dez de ouro", "Dez de paus", "Valete de copas", "Valete de espadas", "Valete de ouro", "Valete de paus", "Dama de copas", "Dama de espadas", "Dama de ouro", "Dama de paus", "Rei de copas", "Rei de espadas", "Rei de ouro", "Rei de paus"],
-    BaralhoValorCarta = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-    
-    % A ideia é fazer 2 baralhos, um com os nomes da carta, outro com os valores delas, então quando eu quiser a carta da posição 30, eu utilizo pegaElementoLista(30, NomeCarta, BaralhoNomeCarta) e também utilizo (30, ValorCarta, BaralhoValorCarta).   
-    
-    % -------------------------- 1° Carta Humano ----------------------------- %
-    
-    %Pegando o tamanho do baralho inicial.
-    tamanhoLista(BaralhoNomeCarta, TamanhoBaralhoNomeCarta), %Informa o tamanho da lista passada.
-    write("Tamanho Inicial do baralho: "), write(TamanhoBaralhoNomeCarta), nl,
+    % Calcula Resultados
+    nl,
+    sum_list(BHumanoVal1,PontuacaoHumano),
+    write("Pontuação do jogador Humano: "), write(PontuacaoHumano),nl,
+    sum_list(BMaquinaVal1,PontuacaoMaquina),
+    write("Pontuação do jogador Máquina: "), write(PontuacaoMaquina),nl,
+
+    condicaoParada(PontuacaoHumano, PontuacaoMaquina),
+    NovoRound is Round + 1,
+    promptDraw(PontuacaoHumano,PontuacaoMaquina,""),
+    round(BNomes2,BValores2,BHumano1,BHumanoVal1,BMaquina1,BMaquinaVal1,NovoRound).
+
+puxarCarta(BNomes, BValores, JNomes, JValores, BNomesFinal, BValoresFinal, JNomesFinal, JValoresFinal):-
+    tamanhoLista(BNomes, SizeNomes), %Informa o tamanho da lista passada.
+    %write("Tamanho Inicial do baralho: "), write(SizeNomes), nl,
     
     %Gerando um valor aleatório do tamanho do baralho inicial partindo de [1;52].
-    random_between(1, TamanhoBaralhoNomeCarta, Random), nl,
-    write("Posição random: "), write(Random), nl,
+    random_between(1, SizeNomes, Random), nl,
+    %write("Posição random: "), write(Random), nl,
 
     %Buscando elemento nas listas
-    pegaElementoLista(Random, NomeCarta, BaralhoNomeCarta), %Pega o elemento 1 da lista BaralhoNomeCarta
-    write(NomeCarta), write(" "),
-    pegaElementoLista(Random, ValorCarta, BaralhoValorCarta), %Pega o elemento 1 da lista BaralhoValorCarta
-    write(ValorCarta),nl,
+    pegaElementoLista(Random, CNome, BNomes), %Pega o elemento 1 da lista BaralhoNomeCarta
+    %write(CNome), write(" "),
+    pegaElementoLista(Random, CValor, BValores), %Pega o elemento 1 da lista BaralhoValorCarta
+    %write(CValor),nl,
     
     %Inserindo valores buscados acima, OBS: Tem de ficar atento ao índice que tá sendo usado, começa em 1 e incrementa, se começar de 2, 0, ou outro valor, quebra o código.
-    insert_at(NomeCarta, [] , 1, BaralhoHumano),
-    write("Baralho Humano: "),
-    write(BaralhoHumano),
-    insert_at(ValorCarta, [], 1, BaralhoHumanoValor),
-    write(" "),
-    write(BaralhoHumanoValor),nl,
+    insert_at(CNome, JNomes , 1, JNomesFinal),
+    write("Baralho do jogador: "),
+    write(JNomesFinal),
+    insert_at(CValor, JValores, 1, JValoresFinal),
+    %write(" "),
+    %write(JValoresFinal),nl,
     
     %removendo a carta do baralho
-    remover(NomeCarta, BaralhoNomeCarta, BaralhoNomeCarta1),nl, 
-    remover(ValorCarta, BaralhoValorCarta, BaralhoValorCarta1),nl, 
+    remover(CNome, BNomes, BNomesFinal),nl, 
+    remover(CValor, BValores, BValoresFinal),nl.
     
     %Imprimindo o baralho
-    write(BaralhoNomeCarta1),nl,
-    
-    % --------------------------- 2° Carta Humano ------------------------- %
-    
-    
-    write("------------------------------------------------------------"),nl,
-    
+    %write(BNomesFinal),nl.
 
-    %Pega o tamanho do baralho
-    tamanhoLista(BaralhoNomeCarta1, TamanhoBaralhoNomeCarta1),nl,
-    write("Novo tamanho do baralho após remoção: "), write(TamanhoBaralhoNomeCarta1),nl,
-    
-    %Gerando um valor aleatório do tamanho do baralho.
-    random_between(1, TamanhoBaralhoNomeCarta1, Random1), nl,
-    write("Posição random: "), write(Random1), nl,
-    
-    %Buscando elemento nas listas
-    pegaElementoLista(Random1, NomeCarta1, BaralhoNomeCarta1), %Pega o elemento 1 da lista BaralhoNomeCarta
-    write(NomeCarta1), write(" "),
-    pegaElementoLista(Random1, ValorCarta1, BaralhoValorCarta1), %Pega o elemento 1 da lista BaralhoValorCarta
-    write(ValorCarta1),nl,
-    
-    %Inserindo valores buscados acima, OBS: Tem de ficar atento ao índice que tá sendo usado, começa em 1 e incrementa, se começar de 2, 0, ou outro valor, quebra o código.
-    insert_at(NomeCarta1, BaralhoHumano , 2, BaralhoHumano1),
-    write("Baralho Humano: "),
-    write(BaralhoHumano1),
-    insert_at(ValorCarta1, BaralhoHumanoValor, 2, BaralhoHumanoValor1),
-    write(" "),
-    write(BaralhoHumanoValor1),nl,
-    
-    %removendo a carta do baralho
-    remover(NomeCarta1, BaralhoNomeCarta1, BaralhoNomeCarta2),nl, 
-    remover(ValorCarta1, BaralhoValorCarta1, BaralhoValorCarta2),nl, 
-    
-    %Imprimindo o baralho
-    write(BaralhoNomeCarta2),nl,nl,
-    
-    
-    sum_list(BaralhoHumanoValor1,PontuacaoJogadorHumano),
-    write("Pontuação do jogodor humano: "), write(PontuacaoJogadorHumano),nl,
-    
-    
-    %Aqui é só colocar depois o resultado da soma da lista da pontuação do jogador máquina para comparação.
-    resultado(PontuacaoJogadorHumano,10),
-    write("-------------------------------------------------------"),
-    
-    % --------------------------- 1° Carta Máquina ------------------------- %
-    
-    
-    %OBS: Quando for fazer o jogador máquina USAR O BARALHO DE ONDE PAROU, OU SEJA, BaralhoNomeCarta2 e BaralhoValorCarta2!!!
-    %
-    %Pronto, agora só falta adicionar 2 cartas iniciais para cada jogador... Jogador Humano já feito! Falta a máquina
-    %Precisa modificar o nome das variáveis que tá um pouco confuso e ruim pra ler
-    %Precisa criar métodos para organizar as coisas
-    %Precisa criar o jogador máquina similar ao jogador humano criado
-    
-    
-    %Aqui deve ser alterado passando como parâmetros os dados acima, o baralho novo, a pontuação, essas coisas...
-    iniciarPartida().
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BhumanoVal > 21,
+    BmaquinaVal < 21,
+    write("Jogador máquina venceu!"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BmaquinaVal > 21,
+    BhumanoVal < 21,
+    write("Jogador humano venceu!"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BmaquinaVal > 21,
+    BhumanoVal > 21,
+    write("Nenhum jogador venceu"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BmaquinaVal = 21,
+    BhumanoVal = 21,
+    write("Deu empate"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BhumanoVal = 21,
+    write("Jogador humano venceu!"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    BmaquinaVal = 21,
+    write("Jogador maquina venceu!"), nl,
+    halt.
+condicaoParada(BhumanoVal, BmaquinaVal):-
+    nl.
 
-opcao(2):-
-    write("Dificuldade escolhida: Médio."), nl.
-
-opcao(3):-
-    write("Dificuldade escolhida: Difícil."), nl.
-
-opcao(_):-
-    write("Opção inválida. Selecione outra opção: "),
-    executaMenu().
+promptDraw(P1,P2, 1) :- nl.
+promptDraw(P1,P2, 2) :-
+    fim(P1,P2).
+promptDraw(P1,P2, _) :-
+    write("Deseja puxar uma carta? 1 para Sim / 2 para Não"),nl,
+    read(Input),
+    promptDraw(P1,P2,Input).
     
-iniciarPartida():-
-    write("Início da partida").
+fim(PontuacaoHumano,PontuacaoMaquina):-
+    resultado(PontuacaoHumano,PontuacaoMaquina),
+    halt.
 
-    
-%-------------- Funções para usar -------------------     
+%-------------- Regras Auxiliares -------------------     
 pegaElementoLista(1, X, [X | _]).
 pegaElementoLista(N, X, [_ | Y]) :-
     pegaElementoLista(M, X, Y),
@@ -142,7 +149,7 @@ remover(X, [X | C], C).
 remover(X, [Y | C], [Y | D]) :-
 remover(X, C, D).
 
-%    (element,list,integer,list)
+%    (elemento,lista,inteiro,lista)
 insert_at(X,L,K,R) :- 
     remove_at(X,R,K,L).
 
@@ -155,9 +162,6 @@ sum_list([H|T], Sum) :-
    sum_list(T, Rest),
    Sum is H + Rest.
 
-resultado(P1, P2):- P1 > P2, write("Jogador humano venceu"), nl.
-resultado(P1, P2):- P1 < P2, write("Jogador máquina venceu"), nl.
+resultado(P1, P2):- P1 > P2, write("Jogador humano venceu!"), nl.
+resultado(P1, P2):- P1 < P2, write("Jogador máquina venceu!"), nl.
 resultado(P1, P1):- write("Empate!!!"), nl.
-   
-main:-
-    executaMenu().
